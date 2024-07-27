@@ -2,7 +2,15 @@ pipeline {
 agent { dockerfile true }
 
    stages {
+    stage('host name') {
+	    steps{
+		    script {
+		    def hostname = sh(returnStdout: true, script: 'hostname').trim()
+		    echo "Running on node: ${env.NODE_NAME} with hostname: ${hostname}"
+		}
 
+	    }
+    }
     stage('Cloning Git') {
 	    steps{
 	      sh 'echo checking out source code'
