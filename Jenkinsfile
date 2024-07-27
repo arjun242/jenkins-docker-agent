@@ -4,10 +4,12 @@ agent { dockerfile true }
    stages {
     stage('host name') {
 	    steps{
-		    script {
-		    def hostname = sh(returnStdout: true, script: 'hostname').trim()
-		    echo "Running on node: ${env.NODE_NAME} with hostname: ${hostname}"
-		}
+		script {
+                    def osType = sh(returnStdout: true, script: 'uname -s').trim()
+                    def osVersion = sh(returnStdout: true, script: 'uname -r').trim()
+                    def osFlavor = sh(returnStdout: true, script: 'cat /etc/os-release | grep PRETTY_NAME').trim().split('=')[1].replaceAll('"', '')
+                    echo "Running on OS: ${osType} ${osVersion} ${osFlavor}"
+                }
 
 	    }
     }
