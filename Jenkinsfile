@@ -1,5 +1,5 @@
 pipeline {
-agent { dockerfile true }
+agent { label 'slave1' }
 
    stages {
     stage('host name') {
