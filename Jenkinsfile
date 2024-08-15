@@ -2,7 +2,7 @@ pipeline {
 agent { 
 	label 'slave2'
 	customWorkspace '/home/ec2-user/'
-      }
+}
 
    stages {
     stage('host name') {
