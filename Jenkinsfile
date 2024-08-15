@@ -60,12 +60,6 @@ agent {
          sh 'echo dast scan for security'
         }
     }
-    stage('logs2slave') {
-      steps  {
-         sh 'echo move job details to slave'
-	 sh 'cp -r '
-        }
-    }
  }
 
 
