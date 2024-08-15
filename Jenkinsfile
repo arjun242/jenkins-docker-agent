@@ -1,5 +1,8 @@
 pipeline {
-agent { label 'slave2' }
+agent { 
+	label 'slave2'
+	customWorkspace '/home/ec2-user/'
+      }
 
    stages {
     stage('host name') {
@@ -55,6 +58,12 @@ agent { label 'slave2' }
     stage('DAST') {
       steps  {
          sh 'echo dast scan for security'
+        }
+    }
+    stage('logs2slave') {
+      steps  {
+         sh 'echo move job details to slave'
+	 sh 'cp -r '
         }
     }
  }
