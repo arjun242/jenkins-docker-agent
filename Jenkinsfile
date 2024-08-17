@@ -1,66 +1,42 @@
 pipeline {
-agent { 
+    agent { 
 	label 'slave2'
-	customWorkspace '/home/ec2-user/'
-}
-
-   stages {
-    stage('host name') {
-	    steps{
-		script {
-                    def osType = sh(returnStdout: true, script: 'uname -s').trim()
-                    def osVersion = sh(returnStdout: true, script: 'uname -r').trim()
-                    def osFlavor = sh(returnStdout: true, script: 'cat /etc/os-release | grep PRETTY_NAME').trim().split('=')[1].replaceAll('"', '')
-                    echo "Running on OS: ${osType} ${osVersion} ${osFlavor}"
-                }
-
-	    }
     }
-    stage('Cloning Git') {
-	    steps{
-	      sh 'echo checking out source code'
-	    }  
-     }  
- 
-    stage('SAST'){
-      steps{
-      	sh 'echo SAST stage'
-	   }
+    environment {
+        // Load properties from the file
+        PROPS = readProperties file: 'pipeline-params.properties'
     }
 
-    
-    stage('Build-and-Tag') {
-    /* This builds the actual image; synonymous to
-         * docker build on the command line */
-      steps{	
-        sh 'echo Build and Tag'
-          }
-    }
+    stages {
+        stage('Checkout') {
+            steps {
+                // Use the parameters from the properties file
+                git branch: "${env.PROPS.BRANCH_NAME}", url: 'https://github.com/your-repo.git'
+            }
+        }
 
-    stage('Post-to-dockerhub') {
-     steps {
-        sh 'echo post to dockerhub repo'
-     }
-    }
+        stage('Build') {
+            steps {
+                echo "Building branch ${env.PROPS.BRANCH_NAME}..."
+                // Add your build steps here
+            }
+        }
 
-    stage('SECURITY-IMAGE-SCANNER'){
-      steps {
-        sh 'echo scan image for security'
-     }
-    }
+        stage('Test') {
+            when {
+                expression { return env.PROPS.RUN_TESTS.toBoolean() }
+            }
+            steps {
+                echo 'Running unit tests...'
+                // Add your test steps here
+            }
+        }
 
-    stage('Pull-image-server') {
-      steps {
-         sh 'echo pulling image ...'
-       }
-      }
-    
-    stage('DAST') {
-      steps  {
-         sh 'echo dast scan for security'
+        stage('Deploy') {
+            steps {
+                echo "Deploying to ${env.PROPS.ENVIRONMENT} environment..."
+                // Add your deploy steps here
+            }
         }
     }
- }
-
-
 }
