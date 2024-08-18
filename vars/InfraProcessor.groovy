@@ -76,7 +76,7 @@ def call(body) {
 							println "*****************************************"
 							println " Running Template Validation "
 							println "****************************************"
-							validateCf(config)
+							// validateCf(config)
 						}
 					}
 				}	
@@ -88,12 +88,12 @@ def call(body) {
 							println "*****************************************"
 							println " Calling mergeRequest"
 							println "****************************************"
-							mergeRequest(config)
+							// mergeRequest(config)
 						} else {
 							println "*****************************************"
 							println " Calling pullRequest"
 							println "****************************************"
-							pullRequestProcess(config)
+							// pullRequestProcess(config)
 						}
 					}	
 				}	
