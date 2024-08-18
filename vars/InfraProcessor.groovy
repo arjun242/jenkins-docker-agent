@@ -8,7 +8,7 @@ def call(body) {
   	body()
   
   	def branch = env.BRANCH_NAME
-  	def mergebranch = "master"
+  	def mergebranch = "main"
   	if(body!=null && body['mergebranch']	!=null){
 		mergebranch = body['mergebranch']
   	}
@@ -38,7 +38,7 @@ def call(body) {
 				script { 
    		    			env.TARGET_AWS_ACCOUNT = body["account"]
       					env.mode = "prd"
-      					env.BUILD_AWS_ACCOUNT = sh ( script: "curl -s -S 'http://169.254.169.254/latest/dynamic/instance-identity/document/' | jq -r '.accountId'", returnStdout: true)
+      					// env.BUILD_AWS_ACCOUNT = sh ( script: "curl -s -S 'http://169.254.169.254/latest/dynamic/instance-identity/document/' | jq -r '.accountId'", returnStdout: true)
       					env.JENKINS_FQDN= sh (script: 'echo ${BUILD_URL/https:\\/\\/} | cut -d "/" -f1', returnStdout: true).trim()
       					env.CODE_AUTHOR = sh (script: "git log -1 --no-merges --format='%ae' ${GIT_COMMIT}", returnStdout: true).trim()	
 						env.CODE_MERGED = sh (script: "git log -1 --format='%ae' ${GIT_COMMIT}", returnStdout: true).trim()
@@ -47,7 +47,7 @@ def call(body) {
 			        	println "BRANCH_NAME           : " + env.BRANCH_NAME
 			        	println "GIT_URL               : " + env.GIT_URL
 			        	println "GIT_COMMIT            : " + env.GIT_COMMIT
-			        	println "BUILD_AWS_ACCOUNT_ID  : " + env.BUILD_AWS_ACCOUNT.trim()
+			        	// println "BUILD_AWS_ACCOUNT_ID  : " + env.BUILD_AWS_ACCOUNT.trim()
 						println "TARGET_AWS_ACCOUNT_ID : " + env.TARGET_AWS_ACCOUNT
 			        	println "JENKINS_FQDN          : " + env.JENKINS_FQDN
 			        	println "CHANGE_TARGET         : " + env.CHANGE_TARGET
